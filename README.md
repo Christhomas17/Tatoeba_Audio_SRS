@@ -32,6 +32,8 @@ Interval = [0,1,1,2,4,8,16,26,38,50,64,78,80]
 
 Times = [8,6,4,3,2,1]
 
+difficulty = 'Medium'
+
 firstTime = 'No'
 
 pydub.AudioSegment.converter = os.path.join(cwd,r"bin\ffmpeg.exe")
@@ -43,4 +45,9 @@ pydub.AudioSegment.converter = os.path.join(cwd,r"bin\ffmpeg.exe")
   - MaxCount is set to 1. This gets rid of sentences that have more than 1 translation. If your language doesn't have enough samples, feel free to change this to a higher number
   - Interval represents my version of a spaced repitition system. Those numbers represent the days when you are going to hear the sentence. So for example, let's say you are hearing the sentence, 'Hello World' for the first time on day 3. You will hear this sentence on day 3, day 4,5,7,11 etc.
   - Times. This represents how many times the sentence will be repeated. In my example, the first day that you hear a sentence, it will be repeated 8 times, the second day 6 times. Any day the sentence is heard after those initial 6 days, it will only be heard once.
+  - Difficulty - You can use either Easy, Medium or Hard. This will only work if one of your languages is English. This uses a package that I found online to determine the difficulty of the sentence.
   - pydub.AudioSegment.converter - This represents where the ffmpeg folder is located. If you followed my directions above, you don't need to change this. 
+  
+Once you have followed all of the steps above, you should be able to just run the script. There will be a "Media" folder inside of the folder where all of these scripts are located. You will have files labeled Day 1, Day 2 etc. 
+
+Feel free to let me know what I can change to help improve this. 
