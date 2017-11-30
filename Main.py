@@ -54,7 +54,7 @@ Times = [8,6,4,3,2,1]
 
 BaseURL = 'https://audio.tatoeba.org/sentences/'
 
-firstTime = 'No'
+firstTime = 'YES'
 
 cwd = os.getcwd()
 pydub.AudioSegment.converter = os.path.join(cwd,r"bin\ffmpeg.exe")
