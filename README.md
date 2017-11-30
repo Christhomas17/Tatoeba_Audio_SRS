@@ -34,7 +34,7 @@ Times = [8,6,4,3,2,1]
 
 difficulty = 'Medium'
 
-firstTime = 'No'
+firstTime = 'YES'
 
 pydub.AudioSegment.converter = os.path.join(cwd,r"bin\ffmpeg.exe")
 ```
@@ -47,6 +47,8 @@ pydub.AudioSegment.converter = os.path.join(cwd,r"bin\ffmpeg.exe")
   - Times. This represents how many times the sentence will be repeated. In my example, the first day that you hear a sentence, it will be repeated 8 times, the second day 6 times. Any day the sentence is heard after those initial 6 days, it will only be heard once.
   - Difficulty - You can use either Easy, Medium or Hard. This will only work if one of your languages is English. This uses a package that I found online to determine the difficulty of the sentence.
   - pydub.AudioSegment.converter - This represents where the ffmpeg folder is located. If you followed my directions above, you don't need to change this. 
+  - firstTime = 'YES' - This one is important. This should be yes only the first time you run the script. It is going to download necessary Excel files from Tatoeba that contain all of the data that we need. These can, and probably will take 20+ minutes to download. This script should also install the necessary packages to make these scripts run correctly.   
+  
   
 Once you have followed all of the steps above, you should be able to just run the script. There will be a "Media" folder inside of the folder where all of these scripts are located. You will have files labeled Day 1, Day 2 etc. 
 
