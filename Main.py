@@ -41,7 +41,7 @@ from AudioWrangling import DownloadAll, Create_Files
 SrcLang = 'eng'
 TgtLang = 'spa'
 
-TotalSentences = 20
+TotalSentences = 200
 SentsPerDay = 10
 
 RepeatTimes = 2
@@ -52,9 +52,11 @@ Interval = [0,1,1,2,4,8,16,26,38,50,64,78,80]
 
 Times = [8,6,4,3,2,1]
 
+difficulty = 'Hard'
+
 BaseURL = 'https://audio.tatoeba.org/sentences/'
 
-firstTime = 'YES'
+firstTime = 'No'
 
 cwd = os.getcwd()
 pydub.AudioSegment.converter = os.path.join(cwd,r"bin\ffmpeg.exe")
@@ -68,41 +70,7 @@ def check_first_time():
         subprocess.call('FirstTime.py', shell = True)
         print('All files downloaded')
 
-def select_few_users(df,TotalSentences):
-    tgtCounts = df['TgtUser'].value_counts()
-    srcCounts = df['SrcUser'].value_counts()
-    
-    #let's remove the counts that are less than 20
-    for index,count in enumerate(tgtCounts):
-        if count <= 20:
-            tgtCounts = tgtCounts[0:index]
-            
-    for index,count in enumerate(srcCounts):
-        if count <= 20:
-            srcCounts = srcCounts[0:index]
-            
-    
-    
-    
-    #let's figure out how many users we need to go through
-    maxUserCount = max(srcCounts.count(), tgtCounts.count())
-    
-    y = pd.DataFrame()
-    tgtUsers = []
-    srcUsers = []
-    
-    for index in range(maxUserCount):
-        try:
-            tgtUsers.append(tgtCounts.index[index])
-            srcUsers.append(srcCounts.index[index])
-        except:
-            pass
-        
-        y = df[(df['TgtUser'].isin(tgtUsers)) & (df['SrcUser'].isin(srcUsers))]
-    if len(y) >= TotalSentences:
-        return(y)
-    else:
-        return(df)
+
         
   
 def create_media_folder():
@@ -118,8 +86,7 @@ def create_media_folder():
     
 def main():
     check_first_time()
-    df = CreateAudioList(TgtLang,SrcLang,MaxCount)
-    df = select_few_users(df,TotalSentences)
+    df = CreateAudioList(TgtLang,SrcLang,MaxCount, difficulty,TotalSentences)  
     
     srs,Indices,Groups = GetSRS(df,TotalSentences,SentsPerDay,Interval,Times)
     
@@ -133,6 +100,6 @@ def main():
     
     return(df)
     
-if __name__ == '__main__':
-    df = main()
+#if __name__ == '__main__':
+#    df = main()
     

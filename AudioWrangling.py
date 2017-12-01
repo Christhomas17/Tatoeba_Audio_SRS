@@ -20,9 +20,8 @@ import os
 def DLFile(ID,Lang,Folder,BaseURL):
     URL = BaseURL + Lang + '/' + ID  + '.mp3'
     
-#    cwd = os.getcwd()
-#    Folder = os.path.join(cwd,'Media')
-    
+
+    #I thought that this was already taken care of in the main file??
     if not os.path.exists(Folder):
         os.makedirs(Folder)
         
@@ -33,7 +32,11 @@ def DLFile(ID,Lang,Folder,BaseURL):
 
 
     #downloads the file
-    urllib.request.urlretrieve(URL,FileName)
+    if os.path.exists(FileName):
+        print("We didn't download a file")
+        pass
+    else:
+        urllib.request.urlretrieve(URL,FileName)
     
 def DownloadAll(df, Indices,TgtLang ,SrcLang,Folder,BaseURL):
     NumFiles = len(Indices)    
@@ -45,7 +48,7 @@ def DownloadAll(df, Indices,TgtLang ,SrcLang,Folder,BaseURL):
         
         DLFile(TgtID,TgtLang,Folder,BaseURL)
         DLFile(SrcID,SrcLang,Folder,BaseURL)
-        print('You have downloaded ' + str(i+1) + ' files.')
+        print('You have downloaded ' + str((i+1)*2) + ' files.')
         
 def CreateOneSentence(TgtID,SrcID,Index,Folder):
     

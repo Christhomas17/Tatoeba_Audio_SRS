@@ -20,7 +20,7 @@ import urllib.request
 import subprocess
 
 def Download_Tars():
-    files = ['http://downloads.tatoeba.org/exports/sentences_detailed.tar.bz2',
+    files = ['http://downloads.tatoeba.org/exports/sentences.tar.bz2',
              'http://downloads.tatoeba.org/exports/links.tar.bz2',
              'http://downloads.tatoeba.org/exports/sentences_with_audio.tar.bz2']
     

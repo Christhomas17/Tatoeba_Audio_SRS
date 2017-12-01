@@ -94,11 +94,11 @@ def FindDifficulty(df,TgtLang,SrcLang):
 #chooses the medium difficulty sentences
 def Choose_Difficulty(df,DiffType):
     percentile = np.percentile(df['Difficulty'],np.arange(0,100,25))
-    if DiffType == 'Low':
+    if DiffType == 'Easy':
         MinRange = percentile[0]
         MaxRange = percentile[1]
     
-    elif DiffType == 'Med':
+    elif DiffType == 'Medium':
         MinRange = percentile[1]
         MaxRange = percentile[2]
         
@@ -110,6 +110,42 @@ def Choose_Difficulty(df,DiffType):
     df.index = np.arange(0,len(df),1)
     return(df)
 
+def select_few_users(df,TotalSentences):
+    tgtCounts = df['TgtUser'].value_counts()
+    srcCounts = df['SrcUser'].value_counts()
+    
+    #let's remove the counts that are less than 20
+    for index,count in enumerate(tgtCounts):
+        if count <= 20:
+            tgtCounts = tgtCounts[0:index]
+            
+    for index,count in enumerate(srcCounts):
+        if count <= 20:
+            srcCounts = srcCounts[0:index]
+            
+    
+    
+    
+    #let's figure out how many users we need to go through
+    maxUserCount = max(srcCounts.count(), tgtCounts.count())
+    
+    y = pd.DataFrame()
+    tgtUsers = []
+    srcUsers = []
+    
+    for index in range(maxUserCount):
+        try:
+            tgtUsers.append(tgtCounts.index[index])
+            srcUsers.append(srcCounts.index[index])
+        except:
+            pass
+        
+        y = df[(df['TgtUser'].isin(tgtUsers)) & (df['SrcUser'].isin(srcUsers))]
+    if len(y) >= TotalSentences:
+        return(y)
+    else:
+        return(df)
+
 #this function is to get rid of sentences that had more than 1 translation suggestion
 def RemoveExtra(df,TgtLang,SrcLang,MaxCount):
     df = df[df.groupby('SrcID').SrcID.transform(len) <= MaxCount]
@@ -119,10 +155,12 @@ def RemoveExtra(df,TgtLang,SrcLang,MaxCount):
     df = df[(df['TgtLang'] == TgtLang) & (df['SrcLang'] == SrcLang)]
     return(df)
 
+def check_licences(df):
+    df = df[(df['SrcLicense'] != r"\N")  & (df['TgtLicense'] != r"\N")]
+    return(df)
 
-    
 
-def CreateAudioList(TgtLang,SrcLang,MaxCount):
+def CreateAudioList(TgtLang,SrcLang,MaxCount, difficulty, TotalSentences):
     Audio,Sent,Links = ImportInfo()
     
     Langs = [SrcLang,TgtLang]
@@ -135,11 +173,17 @@ def CreateAudioList(TgtLang,SrcLang,MaxCount):
     
     #up until this point the index had no relevence to anything
     #this is starting the index at 0 and + 1 each time
-    df.index = np.arange(0,len(df),1)
+   
     
-    df = FindDifficulty(df,TgtLang,SrcLang)
-    df = Choose_Difficulty(df,'Med')
-    dfHard = Choose_Difficulty(df, 'Hard')
+    if TgtLang.upper() == 'ENG' or SrcLang.upper() == 'ENG':
+        df = FindDifficulty(df,TgtLang,SrcLang)
+        df = Choose_Difficulty(df,difficulty)
+        
+    df = check_licences(df)
+    
+    df = select_few_users(df,TotalSentences)
+    
+    df.index = np.arange(0,len(df),1)
     
     return(df)
      
