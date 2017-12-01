@@ -28,6 +28,7 @@ import subprocess
 import os
 import pandas as pd
 import pydub
+import datetime
 
 
 from DataWrangling import CreateAudioList
@@ -95,7 +96,9 @@ def main():
     Create_Files(df, Indices, srs, Groups, Folder, RepeatTimes)
     
     SelectedMedia = df.loc[Indices,:]
-    SelectedMedia.to_csv('SelectedMedia.csv',sep = ',')
+    title = TgtLang + '-' + SrcLang + '-' + str(datetime.datetime.today().date()) + '.xlsx'    
+    title = os.path.join(cwd,title)
+    SelectedMedia.to_csv(title,sep = ',')
     
     
     return(df)
